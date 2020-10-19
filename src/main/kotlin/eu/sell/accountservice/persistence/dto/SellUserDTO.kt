@@ -8,4 +8,8 @@ class SellUserDTO constructor(user: SellUser) {
     var email = user.email
 
     var id = user.id
+
+    var publicName = user.publicName
+
+    var permissions = user.getPermissions()
 }

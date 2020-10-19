@@ -26,7 +26,7 @@ class SellUser(
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     var userRoles: Set<UserRole> = setOf()
-    
+
     fun getPermissions(): Set<String> {
         val permissions = hashSetOf<String>()
         userRoles.filter { it.expiresAt.isAfter(LocalDateTime.now()) }
