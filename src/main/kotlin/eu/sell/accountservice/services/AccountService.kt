@@ -2,7 +2,6 @@ package eu.sell.accountservice.services
 
 import eu.sell.accountservice.persistence.dao.SellUser
 import eu.sell.accountservice.persistence.dto.NewUserDTO
-import eu.sell.accountservice.persistence.dto.SellUserDTO
 import eu.sell.accountservice.repositories.IUserRepo
 import eu.sell.accountservice.utls.exceptions.EntityNotFoundException
 import org.slf4j.LoggerFactory
@@ -11,8 +10,8 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class UserService @Autowired constructor(private val userRepository: IUserRepo) {
-    private val log = LoggerFactory.getLogger(UserService::class.java)
+class AccountService @Autowired constructor(private val userRepository: IUserRepo) {
+    private val log = LoggerFactory.getLogger(AccountService::class.java)
 
     fun existsByEmail(email: String): Boolean {
         return userRepository.existsByEmail(email)

@@ -36,5 +36,8 @@ class SellUser(
         return permissions
     }
 
+    /**
+     * Returns DTO object for user entity for purpose of hinding the password
+     */
     fun getDTO() = SellUserDTO(this)
 }
