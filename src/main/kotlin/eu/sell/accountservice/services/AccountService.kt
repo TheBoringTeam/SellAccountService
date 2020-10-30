@@ -46,8 +46,8 @@ class AccountService @Autowired constructor(
         user.password = passwordEncoder.encode(newPassword)
     }
 
-    fun saveUser(user: SellUser) {
-        userRepository.save(user)
+    fun saveUser(user: SellUser): SellUser {
+        return userRepository.save(user)
     }
 
     fun saveAndFlushUser(user: SellUser): SellUser {
@@ -55,8 +55,8 @@ class AccountService @Autowired constructor(
     }
 
     fun registerUser(newUser: NewUserDTO): SellUser {
-        val sellUser = newUser.getSellUser()
-        userRepository.saveAndFlush(sellUser)
+        var sellUser = newUser.getSellUser()
+        sellUser = saveUser(sellUser)
         //TODO send registration email
         return sellUser
     }

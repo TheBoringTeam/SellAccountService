@@ -5,7 +5,10 @@ import eu.sell.accountservice.services.AccountService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 /**
  * Controller responsible for main authorization functionality
@@ -17,12 +20,8 @@ class AccountMainController @Autowired constructor(private val accountService: A
 
     @PostMapping("/create")
     fun registerUser(@RequestBody userDTO: NewUserDTO): ResponseEntity<*> {
-        log.info("Creating a new user")
-        TODO("Implement user registration")
-    }
-
-    @GetMapping("/me")
-    fun authorize(): ResponseEntity<*> {
-        TODO("Implement user authorization")
+        log.info("Creating a new user: $userDTO")
+        val user = accountService.registerUser(userDTO).getDTO()
+        return ResponseEntity.ok(user)
     }
 }
