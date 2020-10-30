@@ -1,8 +1,7 @@
 package eu.sell.accountservice
 
-import eu.sell.accountservice.persistence.dao.SellUser
 import eu.sell.accountservice.repositories.IUserRepo
-import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,13 +9,17 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 
+@TestPropertySource("classpath:application-test.properties")
 @SpringBootTest
 @RunWith(SpringRunner::class)
-@TestPropertySource("classpath:application-test.properties")
-class AccountServiceApplicationTests {
+class AccountServiceTests {
 
     @Autowired
-    lateinit var userRepo: IUserRepo
+    private lateinit var userRepo: IUserRepo
+
+    @Before
+    fun before() {
+    }
 
     @Test
     fun contextLoads() {
