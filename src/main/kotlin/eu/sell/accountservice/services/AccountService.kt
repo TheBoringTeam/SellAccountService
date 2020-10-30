@@ -6,11 +6,17 @@ import eu.sell.accountservice.repositories.IUserRepo
 import eu.sell.accountservice.utls.exceptions.EntityNotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Lazy
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class AccountService @Autowired constructor(private val userRepository: IUserRepo) {
+class AccountService @Autowired constructor(
+    private val userRepository: IUserRepo,
+    @Lazy
+    private val passwordEncoder: PasswordEncoder
+) {
     private val log = LoggerFactory.getLogger(AccountService::class.java)
 
     fun existsByEmail(email: String): Boolean {
@@ -27,7 +33,28 @@ class AccountService @Autowired constructor(private val userRepository: IUserRep
             .orElseThrow { throw EntityNotFoundException("User was not found with provided email: $userEmail") }
     }
 
-    fun registerUser(newUser: NewUserDTO) : SellUser {
+    fun findByUsername(username: String): SellUser {
+        return userRepository.findByUsername(username)
+            .orElseThrow { throw EntityNotFoundException("User was not found with provided username: $username") }
+    }
+
+    fun isPasswordEquals(user: SellUser, password: String): Boolean {
+        return passwordEncoder.matches(password, user.password)
+    }
+
+    fun setPassword(user: SellUser, newPassword: String) {
+        user.password = passwordEncoder.encode(newPassword)
+    }
+
+    fun saveUser(user: SellUser) {
+        userRepository.save(user)
+    }
+
+    fun saveAndFlushUser(user: SellUser): SellUser {
+        return userRepository.saveAndFlush(user)
+    }
+
+    fun registerUser(newUser: NewUserDTO): SellUser {
         val sellUser = newUser.getSellUser()
         userRepository.saveAndFlush(sellUser)
         //TODO send registration email
