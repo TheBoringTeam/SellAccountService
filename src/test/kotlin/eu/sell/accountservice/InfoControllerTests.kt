@@ -42,10 +42,9 @@ class InfoControllerTests {
     @Test
     fun `show user information`() {
         // create user in db
-        var user = SellUser("testName", "testPublicName", "124", "test@mail.com")
-        user = userRepo.save(user)
+        val user = userRepo.save(SellUser("testUsername", "pName", "pass", "test@mail.com"))
 
-        val request = HttpEntity("${user.id}")
+        val request = HttpEntity(user.id.toString())
 
         val response =
             restTemplate.exchange(
@@ -64,6 +63,34 @@ class InfoControllerTests {
 
     @Test
     fun `show user by username`() {
+        //create new user
+        val user = userRepo.save(SellUser("testUsername", "pName", "pass", "test@mail.com"))
 
+        val request = HttpEntity(user.username)
+
+        val response = restTemplate.exchange(
+            "http://localhost:$port/accounts/username/${user.username}",
+            HttpMethod.GET,
+            request,
+            SellUserDTO::class.java
+        )
+
+        Assert.assertEquals(response.body, user.getDTO())
+    }
+
+    @Test
+    fun `show user by email`() {
+        val user = userRepo.save(SellUser("testUsername", "pName", "pass", "test@mail.com"))
+
+        val request = HttpEntity(user.email)
+
+        val response = restTemplate.exchange(
+            "http://localhost:$port/accounts/email/${user.email}",
+            HttpMethod.GET,
+            request,
+            SellUserDTO::class.java
+        )
+
+        Assert.assertEquals(response.body, user.getDTO())
     }
 }

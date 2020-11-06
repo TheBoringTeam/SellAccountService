@@ -54,11 +54,8 @@ class MainControllerTests {
             SellUserDTO::class.java
         )
 
-        if (response.body == null) {
-            Assert.fail()
-        }
         val user = userRepo.findByEmail(newUserDTO.email).get()
 
-        Assert.assertEquals(user, response.body)
+        Assert.assertEquals(user.getDTO(), response.body)
     }
 }
