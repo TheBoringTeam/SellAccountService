@@ -29,11 +29,11 @@ class AccountInfoController @Autowired constructor(private val accountService: A
     @GetMapping("/username/{username}")
     fun findByUsername(@PathVariable username: String): ResponseEntity<*> {
         log.info("Searching for user with username: $username")
-        return ResponseEntity.ok(accountService.findByUsername(username))
+        return ResponseEntity.ok(accountService.findByUsername(username).getDTO())
     }
 
-    @GetMapping("/email/{accountEmail}")
-    fun findByEmail(@PathVariable("accountEmail") email: String): ResponseEntity<*> {
+    @GetMapping("/email/{email}")
+    fun findByEmail(@PathVariable("email") email: String): ResponseEntity<*> {
         log.info("Searching user with email: $email")
         return ResponseEntity.ok(accountService.findByEmail(email).getDTO())
     }

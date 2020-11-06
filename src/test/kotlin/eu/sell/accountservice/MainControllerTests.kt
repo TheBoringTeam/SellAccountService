@@ -1,7 +1,7 @@
 package eu.sell.accountservice
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import eu.sell.accountservice.persistence.dto.NewUserDTO
+import eu.sell.accountservice.persistence.dto.SellUserDTO
 import eu.sell.accountservice.repositories.IUserRepo
 import org.junit.Assert
 import org.junit.Before
@@ -30,8 +30,6 @@ class MainControllerTests {
     @Autowired
     private lateinit var restTemplate: TestRestTemplate
 
-    private val mapper = ObjectMapper()
-
     @Before
     fun prepareTests() {
         //clear user database
@@ -53,16 +51,11 @@ class MainControllerTests {
             "http://localhost:$port/accounts/create",
             HttpMethod.POST,
             request,
-            String::class.java
+            SellUserDTO::class.java
         )
 
-        if (response.body == null) {
-            Assert.fail()
-        }
-        val responseMap = mapper.readValue(response.body, Map::class.java)
-        val userDb = userRepo.findByEmail(newUserDTO.email).get()
+        val user = userRepo.findByEmail(newUserDTO.email).get()
 
-        Assert.assertEquals(responseMap["username"], newUserDTO.username)
-        Assert.assertEquals(userDb.id.toString(), responseMap["id"])
+        Assert.assertEquals(user.getDTO(), response.body)
     }
 }

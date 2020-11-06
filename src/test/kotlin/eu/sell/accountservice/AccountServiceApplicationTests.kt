@@ -1,8 +1,6 @@
 package eu.sell.accountservice
 
-import eu.sell.accountservice.persistence.dao.SellUser
 import eu.sell.accountservice.repositories.IUserRepo
-import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
