@@ -1,6 +1,6 @@
 package eu.sell.accountservice
 
-import eu.sell.accountservice.persistence.dto.NewUserDTO
+import eu.sell.accountservice.persistence.dao.SellUser
 import eu.sell.accountservice.persistence.dto.SellUserDTO
 import eu.sell.accountservice.repositories.IUserRepo
 import org.junit.Assert
@@ -19,10 +19,10 @@ import org.springframework.test.context.junit4.SpringRunner
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner::class)
 @TestPropertySource("classpath:application-test.properties")
-class MainControllerTests {
+class InfoControllerTests {
 
     @Autowired
-    lateinit var userRepo: IUserRepo
+    private lateinit var userRepo: IUserRepo
 
     @LocalServerPort
     private var port: Int = 0
@@ -32,7 +32,6 @@ class MainControllerTests {
 
     @Before
     fun prepareTests() {
-        //clear user database
         userRepo.deleteAll()
     }
 
@@ -41,24 +40,30 @@ class MainControllerTests {
     }
 
     @Test
-    fun `user created successfully`() {
-        val newUserDTO = NewUserDTO(
-            "testUsername", "testPublicName",
-            "1111", "test@mail.com"
-        )
-        val request = HttpEntity(newUserDTO)
-        val response = restTemplate.exchange(
-            "http://localhost:$port/accounts/create",
-            HttpMethod.POST,
-            request,
-            SellUserDTO::class.java
-        )
+    fun `show user information`() {
+        // create user in db
+        var user = SellUser("testName", "testPublicName", "124", "test@mail.com")
+        user = userRepo.save(user)
+
+        val request = HttpEntity("${user.id}")
+
+        val response =
+            restTemplate.exchange(
+                "http://localhost:$port/accounts/${user.id}",
+                HttpMethod.GET,
+                request,
+                SellUserDTO::class.java
+            )
 
         if (response.body == null) {
             Assert.fail()
+        } else {
+            Assert.assertEquals(response.body, user.getDTO())
         }
-        val user = userRepo.findByEmail(newUserDTO.email).get()
+    }
 
-        Assert.assertEquals(user, response.body)
+    @Test
+    fun `show user by username`() {
+
     }
 }
