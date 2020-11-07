@@ -58,4 +58,9 @@ class MainControllerTests {
 
         Assert.assertEquals(user.getDTO(), response.body)
     }
+
+    @Test
+    fun `user created successfully with JSON`() {
+        val json = "{\"username\":\"testUsername1\", \"public_name\" : \"testPublicName}"
+    }
 }
