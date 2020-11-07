@@ -1,5 +1,6 @@
 package eu.sell.accountservice
 
+import eu.sell.accountservice.persistence.dao.SellUser
 import eu.sell.accountservice.persistence.dto.NewUserDTO
 import eu.sell.accountservice.persistence.dto.SellUserDTO
 import eu.sell.accountservice.repositories.IUserRepo
@@ -61,6 +62,16 @@ class MainControllerTests {
 
     @Test
     fun `user created successfully with JSON`() {
-        val json = "{\"username\":\"testUsername1\", \"public_name\" : \"testPublicName}"
+        val json = "{" +
+                "\"username\":\"testUsername1\"," +
+                " \"public_name\" : \"testPublicName\"," +
+                "\"password\" : \"testPass\"," +
+                "\"email\" : \"test@mail.com\"" +
+                "}"
+    }
+
+    @Test
+    fun `change password successful`() {
+        val user = userRepo.save(SellUser("test", "test", "dawdawdaw", "email"))
     }
 }
