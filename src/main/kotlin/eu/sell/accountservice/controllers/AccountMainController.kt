@@ -26,7 +26,7 @@ class AccountMainController @Autowired constructor(private val accountService: A
     @PutMapping("/update/password/{userId}")
     fun updatePassword(
         @PathVariable("userId") userId: String,
-        changePasswordForm: ChangePasswordForm
+        @RequestBody changePasswordForm: ChangePasswordForm
     ): ResponseEntity<*> {
         log.info("Updating password for user $userId")
         val user = accountService.updatePassword(userId, changePasswordForm.oldPassword, changePasswordForm.newPassword)

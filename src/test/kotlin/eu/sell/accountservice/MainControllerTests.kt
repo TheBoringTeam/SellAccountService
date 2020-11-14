@@ -1,9 +1,10 @@
 package eu.sell.accountservice
 
-import eu.sell.accountservice.persistence.dao.SellUser
+import eu.sell.accountservice.persistence.dto.ChangePasswordForm
 import eu.sell.accountservice.persistence.dto.NewUserDTO
 import eu.sell.accountservice.persistence.dto.SellUserDTO
 import eu.sell.accountservice.repositories.IUserRepo
+import eu.sell.accountservice.services.AccountService
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -24,6 +25,9 @@ class MainControllerTests {
 
     @Autowired
     lateinit var userRepo: IUserRepo
+
+    @Autowired
+    lateinit var accountService: AccountService
 
     @LocalServerPort
     private var port: Int = 0
@@ -72,6 +76,17 @@ class MainControllerTests {
 
     @Test
     fun `change password successful`() {
-        val user = userRepo.save(SellUser("test", "test", "dawdawdaw", "email"))
+        val user = accountService.registerUser(NewUserDTO("test", "testPublicName", "1234", "email.test@mail.com"))
+        val changeForm = ChangePasswordForm("1234", "12345")
+        println(changeForm.oldPassword)
+        println(changeForm.newPassword)
+        val request = HttpEntity(changeForm)
+        val response = restTemplate.exchange(
+            "http://localhost:$port/accounts/update/password/${user.id}",
+            HttpMethod.PUT,
+            request,
+            SellUserDTO::class.java
+        )
+        Assert.assertEquals(response!!.body!!.username, user.username)
     }
 }
