@@ -66,7 +66,8 @@ class AccountService @Autowired constructor(
     }
 
     fun registerUser(newUser: NewUserDTO): SellUser {
-        var sellUser = newUser.getSellUser()
+        var sellUser =
+            SellUser(newUser.username, newUser.publicName, passwordEncoder.encode(newUser.password), newUser.password)
         sellUser = saveUser(sellUser)
         //TODO send registration email
         return sellUser

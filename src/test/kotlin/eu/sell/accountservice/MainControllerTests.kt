@@ -78,8 +78,6 @@ class MainControllerTests {
     fun `change password successful`() {
         val user = accountService.registerUser(NewUserDTO("test", "testPublicName", "1234", "email.test@mail.com"))
         val changeForm = ChangePasswordForm("1234", "12345")
-        println(changeForm.oldPassword)
-        println(changeForm.newPassword)
         val request = HttpEntity(changeForm)
         val response = restTemplate.exchange(
             "http://localhost:$port/accounts/update/password/${user.id}",
@@ -87,6 +85,6 @@ class MainControllerTests {
             request,
             SellUserDTO::class.java
         )
-        Assert.assertEquals(response!!.body!!.username, user.username)
+        Assert.assertEquals(response.body!!.username, user.username)
     }
 }
