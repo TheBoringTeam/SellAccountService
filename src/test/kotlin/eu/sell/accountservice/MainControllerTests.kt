@@ -14,7 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
+import org.springframework.http.MediaType
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 
@@ -60,18 +62,29 @@ class MainControllerTests {
         )
 
         val user = userRepo.findByEmail(newUserDTO.email).get()
-
         Assert.assertEquals(user.getDTO(), response.body)
     }
 
     @Test
     fun `user created successfully with JSON`() {
-        val json = "{" +
-                "\"username\":\"testUsername1\"," +
-                " \"public_name\" : \"testPublicName\"," +
-                "\"password\" : \"testPass\"," +
-                "\"email\" : \"test@mail.com\"" +
+        val json = "{\n" +
+                "    \"username\": \"testusername\",\n" +
+                "    \"public_name\": \"testPublicName\",\n" +
+                "    \"password\": \"password1\",\n" +
+                "    \"email\": \"email@mail.com\"\n" +
                 "}"
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        val request = HttpEntity(json, headers)
+        val response = restTemplate.exchange(
+            "http://localhost:$port/accounts/create",
+            HttpMethod.POST,
+            request,
+            SellUserDTO::class.java
+        )
+
+        val user = userRepo.findByUsername("testusername").get()
+        Assert.assertEquals(user.getDTO(), response.body)
     }
 
     @Test
