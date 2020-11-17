@@ -89,7 +89,7 @@ class MainControllerTests {
 
     @Test
     fun `change password successful`() {
-        val user = accountService.registerUser(NewUserDTO("test", "testPublicName", "1234", "email.test@mail.com"))
+        var user = accountService.registerUser(NewUserDTO("test", "testPublicName", "1234", "email.test@mail.com"))
         val changeForm = ChangePasswordForm("1234", "12345")
         val request = HttpEntity(changeForm)
         val response = restTemplate.exchange(
@@ -98,6 +98,30 @@ class MainControllerTests {
             request,
             SellUserDTO::class.java
         )
+        
+        user = accountService.findById(user.id)
+        Assert.assertTrue(accountService.isPasswordEquals(user, "12345"))
+        Assert.assertEquals(response.body!!.username, user.username)
+    }
+
+    @Test
+    fun `change password successful with JSON`() {
+        var user = accountService.registerUser(NewUserDTO("test", "testPublicName", "1234", "email.test@mail.com"))
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        val json = "{\n" +
+                "    \"old_password\": \"1234\",\n" +
+                "    \"new_password\": \"12345\"\n" +
+                "}"
+        val request = HttpEntity(json, headers)
+        val response = restTemplate.exchange(
+            "http://localhost:$port/accounts/update/password/${user.id}",
+            HttpMethod.PUT,
+            request,
+            SellUserDTO::class.java
+        )
+        user = accountService.findById(user.id)
+        Assert.assertTrue(accountService.isPasswordEquals(user, "12345"))
         Assert.assertEquals(response.body!!.username, user.username)
     }
 }

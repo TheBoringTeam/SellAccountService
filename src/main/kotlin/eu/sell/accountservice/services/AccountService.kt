@@ -46,10 +46,11 @@ class AccountService @Autowired constructor(
         } else {
             throw PasswordNotMatchException("Password for user $userId doesn't match")
         }
+        userRepository.save(user)
         return user
     }
 
-    private fun isPasswordEquals(user: SellUser, password: String): Boolean {
+    fun isPasswordEquals(user: SellUser, password: String): Boolean {
         return passwordEncoder.matches(password, user.password)
     }
 
