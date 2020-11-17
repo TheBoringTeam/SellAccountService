@@ -4,6 +4,7 @@ import eu.sell.accountservice.persistence.dao.SellUser
 import eu.sell.accountservice.persistence.dto.NewUserDTO
 import eu.sell.accountservice.repositories.IUserRepo
 import eu.sell.accountservice.utls.exceptions.EntityNotFoundException
+import eu.sell.accountservice.utls.exceptions.PasswordNotMatchException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
@@ -38,11 +39,22 @@ class AccountService @Autowired constructor(
             .orElseThrow { throw EntityNotFoundException("User was not found with provided username: $username") }
     }
 
+    fun updatePassword(userId: String, oldPassword: String, newPassword: String): SellUser {
+        val user = findById(UUID.fromString(userId))
+        if (isPasswordEquals(user, oldPassword)) {
+            setPassword(user, newPassword)
+        } else {
+            throw PasswordNotMatchException("Password for user $userId doesn't match")
+        }
+        userRepository.save(user)
+        return user
+    }
+
     fun isPasswordEquals(user: SellUser, password: String): Boolean {
         return passwordEncoder.matches(password, user.password)
     }
 
-    fun setPassword(user: SellUser, newPassword: String) {
+    private fun setPassword(user: SellUser, newPassword: String) {
         user.password = passwordEncoder.encode(newPassword)
     }
 
@@ -55,7 +67,8 @@ class AccountService @Autowired constructor(
     }
 
     fun registerUser(newUser: NewUserDTO): SellUser {
-        var sellUser = newUser.getSellUser()
+        var sellUser =
+            SellUser(newUser.username, newUser.publicName, passwordEncoder.encode(newUser.password), newUser.email)
         sellUser = saveUser(sellUser)
         //TODO send registration email
         return sellUser
