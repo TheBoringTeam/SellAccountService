@@ -44,9 +44,10 @@ class AccountService @Autowired constructor(
         if (isPasswordEquals(user, oldPassword)) {
             setPassword(user, newPassword)
         } else {
+            log.error("The new password for user $userId is not the same with old one.")
             throw PasswordNotMatchException("Password for user $userId doesn't match")
         }
-        userRepository.save(user)
+        saveAndFlushUser(user)
         return user
     }
 

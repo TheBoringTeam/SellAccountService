@@ -44,10 +44,6 @@ class MainControllerTests {
     }
 
     @Test
-    fun contextLoads() {
-    }
-
-    @Test
     fun `user created successfully`() {
         val newUserDTO = NewUserDTO(
             "testUsername", "testPublicName",
@@ -98,7 +94,7 @@ class MainControllerTests {
             request,
             SellUserDTO::class.java
         )
-        
+
         user = accountService.findById(user.id)
         Assert.assertTrue(accountService.isPasswordEquals(user, "12345"))
         Assert.assertEquals(response.body!!.username, user.username)
