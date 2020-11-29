@@ -1,7 +1,7 @@
 package eu.sell.accountservice
 
 import eu.sell.accountservice.persistence.dto.ChangePasswordForm
-import eu.sell.accountservice.persistence.dto.NewUserDTO
+import eu.sell.accountservice.persistence.dto.RegisterModel
 import eu.sell.accountservice.persistence.dto.SellUserDTO
 import eu.sell.accountservice.repositories.IUserRepo
 import eu.sell.accountservice.services.AccountService
@@ -45,7 +45,7 @@ class MainControllerTests {
 
     @Test
     fun `user created successfully`() {
-        val newUserDTO = NewUserDTO(
+        val newUserDTO = RegisterModel(
             "testUsername", "testPublicName",
             "1111", "test@mail.com"
         )
@@ -85,7 +85,7 @@ class MainControllerTests {
 
     @Test
     fun `change password successful`() {
-        var user = accountService.registerUser(NewUserDTO("test", "testPublicName", "1234", "email.test@mail.com"))
+        var user = accountService.registerUser(RegisterModel("test", "testPublicName", "1234", "email.test@mail.com"))
         val changeForm = ChangePasswordForm("1234", "12345")
         val request = HttpEntity(changeForm)
         val response = restTemplate.exchange(
@@ -102,7 +102,7 @@ class MainControllerTests {
 
     @Test
     fun `change password successful with JSON`() {
-        var user = accountService.registerUser(NewUserDTO("test", "testPublicName", "1234", "email.test@mail.com"))
+        var user = accountService.registerUser(RegisterModel("test", "testPublicName", "1234", "email.test@mail.com"))
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         val json = "{\n" +

@@ -1,12 +1,13 @@
 package eu.sell.accountservice.controllers
 
 import eu.sell.accountservice.persistence.dto.ChangePasswordForm
-import eu.sell.accountservice.persistence.dto.NewUserDTO
+import eu.sell.accountservice.persistence.dto.RegisterModel
 import eu.sell.accountservice.services.AccountService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 /**
  * Controller responsible for main authorization functionality
@@ -16,11 +17,16 @@ import org.springframework.web.bind.annotation.*
 class AccountMainController @Autowired constructor(private val accountService: AccountService) {
     private val log = LoggerFactory.getLogger(AccountMainController::class.java)
 
-    @PostMapping("/create")
-    fun createUser(@RequestBody userDTO: NewUserDTO): ResponseEntity<*> {
-        log.info("Creating a new user: $userDTO")
-        val user = accountService.registerUser(userDTO).getDTO()
+    @PostMapping("/register")
+    fun createUser(@Valid @RequestBody newUserModel: RegisterModel): ResponseEntity<*> {
+        log.info("Creating a new user: $newUserModel")
+        val user = accountService.registerUser(newUserModel).getDTO()
         return ResponseEntity.ok(user)
+    }
+
+    @PostMapping("/login")
+    fun authorizeUser(): ResponseEntity<*> {
+        TODO("Implement login functionality")
     }
 
     @PutMapping("/update/password/{userId}")

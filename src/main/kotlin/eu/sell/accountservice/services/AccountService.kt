@@ -1,7 +1,7 @@
 package eu.sell.accountservice.services
 
 import eu.sell.accountservice.persistence.dao.SellUser
-import eu.sell.accountservice.persistence.dto.NewUserDTO
+import eu.sell.accountservice.persistence.dto.RegisterModel
 import eu.sell.accountservice.repositories.IUserRepo
 import eu.sell.accountservice.utls.exceptions.EntityNotFoundException
 import eu.sell.accountservice.utls.exceptions.PasswordNotMatchException
@@ -22,6 +22,10 @@ class AccountService @Autowired constructor(
 
     fun existsByEmail(email: String): Boolean {
         return userRepository.existsByEmail(email)
+    }
+
+    fun existsByUsername(username: String): Boolean {
+        return userRepository.existsByUsername(username)
     }
 
     fun findById(userId: UUID): SellUser {
@@ -67,10 +71,10 @@ class AccountService @Autowired constructor(
         return userRepository.saveAndFlush(user)
     }
 
-    fun registerUser(newUser: NewUserDTO): SellUser {
+    fun registerUser(newUser: RegisterModel): SellUser {
         var sellUser =
             SellUser(newUser.username, newUser.publicName, passwordEncoder.encode(newUser.password), newUser.email)
-        sellUser = saveUser(sellUser)
+        sellUser = saveAndFlushUser(sellUser)
         //TODO send registration email
         return sellUser
     }

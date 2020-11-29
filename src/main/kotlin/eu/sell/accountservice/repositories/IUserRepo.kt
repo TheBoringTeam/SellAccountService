@@ -16,4 +16,6 @@ interface IUserRepo : JpaRepository<SellUser, UUID> {
     override fun existsById(id: UUID): Boolean
 
     fun findByUsername(username: String): Optional<SellUser>
+
+    fun existsByUsername(username: String): Boolean
 }
