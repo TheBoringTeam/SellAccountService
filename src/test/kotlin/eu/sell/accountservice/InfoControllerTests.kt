@@ -42,7 +42,7 @@ class InfoControllerTests {
     @Test
     fun `show user information`() {
         // create user in db
-        val user = userRepo.save(SellUser("testUsername", "pName", "pass", "test@mail.com"))
+        val user = userRepo.save(SellUser("testUsername", "pName", "pass", "test@mail.com", true))
 
         val request = HttpEntity(user.id.toString())
 
@@ -64,7 +64,7 @@ class InfoControllerTests {
     @Test
     fun `show user by username`() {
         //create new user
-        val user = userRepo.save(SellUser("testUsername", "pName", "pass", "test@mail.com"))
+        val user = userRepo.save(SellUser("testUsername", "pName", "pass", "test@mail.com", true))
 
         val request = HttpEntity(user.username)
 
@@ -80,7 +80,7 @@ class InfoControllerTests {
 
     @Test
     fun `show user by email`() {
-        val user = userRepo.save(SellUser("testUsername", "pName", "pass", "test@mail.com"))
+        val user = userRepo.save(SellUser("testUsername", "pName", "pass", "test@mail.com", true))
 
         val request = HttpEntity(user.email)
 

@@ -2,6 +2,7 @@ package eu.sell.accountservice.persistence.dao
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import eu.sell.accountservice.persistence.dto.SellUserDTO
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
@@ -18,7 +19,10 @@ class SellUser(
     var password: String,
 
     @Column(name = "email", nullable = false, unique = true)
-    var email: String
+    var email: String,
+
+    @Column(name = "is_activated", nullable = false)
+    var isActivated: Boolean
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,11 +32,17 @@ class SellUser(
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     var userRoles: Set<UserRole> = setOf()
 
-    fun getPermissions(): Set<String> {
-        val permissions = hashSetOf<String>()
+    fun getPermissions(): List<SimpleGrantedAuthority> {
+        val permissions = arrayListOf<SimpleGrantedAuthority>()
         userRoles.filter { it.expiresAt.isAfter(LocalDateTime.now()) }
             .forEach {
-                it.role.rolePermissions.forEach { rolePermission -> permissions.add(rolePermission.permission.name) }
+                it.role.rolePermissions.forEach { rolePermission ->
+                    permissions.add(
+                        SimpleGrantedAuthority(
+                            rolePermission.permission.name
+                        )
+                    )
+                }
             }
         return permissions
     }

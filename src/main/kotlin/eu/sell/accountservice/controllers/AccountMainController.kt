@@ -24,11 +24,6 @@ class AccountMainController @Autowired constructor(private val accountService: A
         return ResponseEntity.ok(user)
     }
 
-    @PostMapping("/login")
-    fun authorizeUser(): ResponseEntity<*> {
-        TODO("Implement login functionality")
-    }
-
     @PutMapping("/update/password/{userId}")
     fun updatePassword(
         @PathVariable("userId") userId: String,

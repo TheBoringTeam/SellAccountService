@@ -73,9 +73,15 @@ class AccountService @Autowired constructor(
 
     fun registerUser(newUser: RegisterModel): SellUser {
         var sellUser =
-            SellUser(newUser.username, newUser.publicName, passwordEncoder.encode(newUser.password), newUser.email)
+            SellUser(
+                newUser.username,
+                newUser.publicName,
+                passwordEncoder.encode(newUser.password),
+                newUser.email,
+                true
+            )
         sellUser = saveAndFlushUser(sellUser)
-        //TODO send registration email
+        //TODO send registration email and then change isActivate to false
         return sellUser
     }
 }

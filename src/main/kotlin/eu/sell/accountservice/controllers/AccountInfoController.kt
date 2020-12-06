@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
 /**
- * Controller resposible for account information functionality
+ * Controller responsible for account information functionality
  */
 @RestController
 @RequestMapping("/accounts")
 class AccountInfoController @Autowired constructor(private val accountService: AccountService) {
-
     private val log = LoggerFactory.getLogger(AccountInfoController::class.java)
 
     @GetMapping("/{userId}")

@@ -14,7 +14,7 @@ class SellUserDTO {
         this.username = user.username
         this.email = user.email
         this.publicName = user.publicName
-        this.permissions = user.getPermissions()
+//        this.permissions = user.getPermissions()
     }
 
     @JsonCreator
@@ -23,7 +23,7 @@ class SellUserDTO {
         this.username = username
         this.email = email
         this.publicName = publicName
-        this.permissions = permissions
+//        this.permissions = permissions
     }
 
     @field:JsonProperty("id")
@@ -38,8 +38,8 @@ class SellUserDTO {
     @field:JsonProperty("public_name")
     var publicName: String
 
-    @field:JsonProperty("permissions")
-    var permissions: Set<String>
+//    @field:JsonProperty("permissions")
+//    var permissions: Set<String>
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -51,7 +51,7 @@ class SellUserDTO {
         if (username != other.username) return false
         if (email != other.email) return false
         if (publicName != other.publicName) return false
-        if (permissions != other.permissions) return false
+//        if (permissions != other.permissions) return false
 
         return true
     }
@@ -61,7 +61,7 @@ class SellUserDTO {
         result = 31 * result + username.hashCode()
         result = 31 * result + email.hashCode()
         result = 31 * result + publicName.hashCode()
-        result = 31 * result + permissions.hashCode()
+//        result = 31 * result + permissions.hashCode()
         return result
     }
 }
