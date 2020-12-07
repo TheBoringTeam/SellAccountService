@@ -1,6 +1,6 @@
 package eu.sell.accountservice
 
-import eu.sell.accountservice.persistence.dto.ChangePasswordForm
+import eu.sell.accountservice.persistence.dto.ChangePasswordReqModel
 import eu.sell.accountservice.persistence.dto.RegisterModel
 import eu.sell.accountservice.persistence.dto.SellUserDTO
 import eu.sell.accountservice.repositories.IUserRepo
@@ -86,7 +86,7 @@ class MainControllerTests {
     @Test
     fun `change password successful`() {
         var user = accountService.registerUser(RegisterModel("test", "testPublicName", "1234", "email.test@mail.com"))
-        val changeForm = ChangePasswordForm("1234", "12345")
+        val changeForm = ChangePasswordReqModel("1234", "12345")
         val request = HttpEntity(changeForm)
         val response = restTemplate.exchange(
             "http://localhost:$port/accounts/update/password/${user.id}",

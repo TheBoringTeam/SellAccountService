@@ -1,6 +1,6 @@
 package eu.sell.accountservice.controllers
 
-import eu.sell.accountservice.persistence.dto.ChangePasswordForm
+import eu.sell.accountservice.persistence.dto.ChangePasswordReqModel
 import eu.sell.accountservice.persistence.dto.RegisterModel
 import eu.sell.accountservice.services.AccountService
 import org.slf4j.LoggerFactory
@@ -27,7 +27,7 @@ class AccountMainController @Autowired constructor(private val accountService: A
     @PutMapping("/update/password/{userId}")
     fun updatePassword(
         @PathVariable("userId") userId: String,
-        @RequestBody changePasswordForm: ChangePasswordForm
+        @RequestBody changePasswordForm: ChangePasswordReqModel
     ): ResponseEntity<*> {
         log.info("Updating password for user $userId")
         val user = accountService.updatePassword(userId, changePasswordForm.oldPassword, changePasswordForm.newPassword)

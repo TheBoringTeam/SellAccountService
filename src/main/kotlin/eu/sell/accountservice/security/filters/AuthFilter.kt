@@ -30,8 +30,6 @@ class AuthFilter constructor(
     private val objectMapper = jacksonObjectMapper()
 
     override fun attemptAuthentication(request: HttpServletRequest, response: HttpServletResponse): Authentication? {
-        log.info("Trying to authenticate... ${request.reader}")
-
         val jsonResponse = request.reader.lines().collect(Collectors.joining())
 
         log.info("Trying to authenticate... $jsonResponse")
@@ -66,23 +64,4 @@ class AuthFilter constructor(
         response.addHeader("token", token)
         response.addHeader("userId", user.id.toString())
     }
-
-//    override fun successfulAuthentication(
-//        request: HttpServletRequest,
-//        response: HttpServletResponse,
-//        authResult: Authentication
-//    ) {
-////        val username = (authResult.principal as User).username
-////        val user = accountService.findByUsername(username)
-////        // use it in case when we gonna use email as the first login param
-//////        val user = userDetailsService.loadUserByUsername(username)
-////
-////        //Can use setExpiration date if we need it
-////        val token = Jwts.builder()
-////            .setSubject(user.id.toString())
-////            .signWith(SignatureAlgorithm.HS256, secretKey)
-////            .compact()
-////        response.addHeader("token", token)
-////        response.addHeader("userId", user.id.toString())
-//    }
 }
